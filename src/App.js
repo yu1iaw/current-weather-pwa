@@ -2,19 +2,26 @@ import React, { useState } from 'react';
 import { fetchWeather } from './api/fetchWeather';
 
 import './App.css';
+import 'animate.css';
 
 const App = () => {
     const [value, setValue] = useState("");
     const [weather, setWeather] = useState(sessionStorage.getItem("weather") ? JSON.parse(sessionStorage.getItem("weather")) : {});
+    const [error, setError] = useState(null);
     
 
     const search = async (e) => {
-        if (e.key === "Enter") {
-            const data = await fetchWeather(value);
-    
-            setWeather(data);
-            sessionStorage.setItem("weather", JSON.stringify(data));
-            setValue("");
+        if (e.key === "Enter" && value) {
+            try {
+                const data = await fetchWeather(value);
+        
+                setWeather(data);
+                sessionStorage.setItem("weather", JSON.stringify(data));
+                setValue("");
+
+            } catch(e) {
+                setError(e);
+            }
         }
     }
 
@@ -22,10 +29,13 @@ const App = () => {
         <div className="main-container">
             <input 
                 type="text"
-                className='search'
+                className={`search ${error ? 'error-theme animate__animated animate__headShake animate__faster' : ""}`}
                 placeholder='Search for a city to get a forecast...'
                 value={value}
-                onChange={(e) => setValue(e.target.value)}
+                onChange={(e) => {
+                    error && setError(null);
+                    setValue(e.target.value);
+                }}
                 onKeyPress={search} />
             {
                 weather.main && (

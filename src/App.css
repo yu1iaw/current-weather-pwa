@@ -32,6 +32,10 @@ body,
 	background: rgba(250, 250, 250, 0.85);
 }
 
+.error-theme {
+	color: indianred;
+}
+
 .city {
 	display: flex;
 	align-items: center;
@@ -91,6 +95,6 @@ p {
 	}
 
 	.city {
-		padding: 40px 10%;
+		padding: 20px 8%;
 	}
 }
